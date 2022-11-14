@@ -33,6 +33,12 @@ variable "lb_probe_unhealthy_threshold" {
   default     = 2
 }
 
+variable "backend_addresses" {
+  description = "ip addresses in the backend pool"
+  type        = list(string)
+  default     = []
+}
+
 variable "lb_probe_interval" {
   description = "Interval in seconds the load balancer health probe rule does a check"
   type        = number
