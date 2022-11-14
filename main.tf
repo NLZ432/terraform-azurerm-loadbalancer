@@ -39,6 +39,15 @@ resource "azurerm_lb_backend_address_pool" "azlb" {
   loadbalancer_id     = azurerm_lb.azlb.id
 }
 
+resource "azurerm_lb_backend_address_pool_address" "backendaddress" {
+  count = length(var.backend_addresses)
+  
+  name                    = "${count.index}"
+  backend_address_pool_id = data.azurerm_lb_backend_address_pool.azlb.id
+  virtual_network_id      = var.vnet_id
+  ip_address              = var.backend_addresses[count.index]
+}
+
 resource "azurerm_lb_nat_rule" "azlb" {
   count                          = length(var.remote_port)
   name                           = "VM-${count.index}"
