@@ -77,6 +77,12 @@ variable "frontend_subnet_id" {
   default     = ""
 }
 
+variable "vnet_id" {
+  description = "vnet id"
+  type        = string
+  default     = ""
+}
+
 variable "frontend_private_ip_address" {
   description = "(Optional) Private ip address to assign to frontend. Use it with type = private"
   type        = string
