@@ -37,6 +37,7 @@ resource "azurerm_lb" "azlb" {
 resource "azurerm_lb_backend_address_pool" "azlb" {
   name                = "BackEndAddressPool"
   loadbalancer_id     = azurerm_lb.azlb.id
+  depends_on = [azurerm_lb.azlb]
 }
 
 resource "azurerm_lb_backend_address_pool_address" "backendaddress" {
@@ -46,6 +47,7 @@ resource "azurerm_lb_backend_address_pool_address" "backendaddress" {
   backend_address_pool_id = azurerm_lb_backend_address_pool.azlb.id
   virtual_network_id      = var.vnet_id
   ip_address              = var.backend_addresses[count.index]
+  depends_on = [azurerm_lb.azlb, azurerm_lb_backend_address_pool.azlb]
 }
 
 resource "azurerm_lb_nat_rule" "azlb" {
