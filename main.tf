@@ -59,6 +59,7 @@ resource "azurerm_lb_nat_rule" "azlb" {
   frontend_port                  = "5000${count.index + 1}"
   backend_port                   = element(var.remote_port[element(keys(var.remote_port), count.index)], 1)
   frontend_ip_configuration_name = var.frontend_name
+  depends_on = [azurerm_lb_backend_address_pool.azlb]
 }
 
 resource "azurerm_lb_probe" "azlb" {
@@ -70,6 +71,7 @@ resource "azurerm_lb_probe" "azlb" {
   interval_in_seconds = var.lb_probe_interval
   number_of_probes    = var.lb_probe_unhealthy_threshold
   request_path        = element(var.lb_probe[element(keys(var.lb_probe), count.index)], 2)
+  depends_on = [azurerm_lb_backend_address_pool.azlb]
 }
 
 resource "azurerm_lb_rule" "azlb" {
@@ -84,4 +86,5 @@ resource "azurerm_lb_rule" "azlb" {
   backend_address_pool_ids       = [azurerm_lb_backend_address_pool.azlb.id]
   idle_timeout_in_minutes        = 5
   probe_id                       = element(azurerm_lb_probe.azlb.*.id, count.index)
+  depends_on = [azurerm_lb_backend_address_pool.azlb]
 }
